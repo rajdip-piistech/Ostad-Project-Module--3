@@ -48,13 +48,13 @@ jobs:
       - name: Display test results
         run: type .\artifacts\test-results.txt # 'type' for Windows
 
-      - name: Deploy application
+      - name: Install PM2 globally
+        run: npm install -g pm2
+
+      - name: Start or Restart Application with PM2
         run: |
-                npm install -g pm2
+                pm2 stop node-app || echo "No existing process found"
+                pm2 delete node-app || echo "No existing process found"
+                pm2 start npm --name "node-app" -- start
+                pm2 save
                 pm2 status
-                # delete node-app process
-                pm2 restart all
-                # Create a Background process name node-app
-                pm2 start "npm start" --name="node-app"
-                # Save The Process List.
-                pm2 save                             
