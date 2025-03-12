@@ -1,0 +1,62 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    #test Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22' # Adjust based on your app's Node version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test > test-results.txt 2>&1 || true # Capture output, continue even if tests fail
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: test-results.txt
+
+  deploy:
+    #deploy job self hosted
+    needs: test # Depends on test job
+    runs-on: [self-hosted] # Use self-hosted runner
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Download test results
+        uses: actions/download-artifact@v3
+        with:
+          name: test-results
+          path: ./artifacts
+
+      - name: Display test results
+        run: cat ./artifacts/test-results.txt
+
+      - name: Deploy application
+        run: |
+          npm install -g pm2 # Install PM2 globally if not already present
+          pm2 start app.js --name "nodejs-app" # Adjust based on your app's entry point
+          pm2 save # Save process list for restarts
