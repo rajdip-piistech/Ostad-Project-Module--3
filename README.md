@@ -1,4 +1,4 @@
-
+[![CI/CD Pipeline](https://github.com/rajdip-piistech/Ostad-Project-Module-3/actions/workflows/ci-cd-pipeline.yml/badge.svg?branch=main)](https://github.com/rajdip-piistech/Ostad-Project-Module-3/actions/workflows/ci-cd-pipeline.yml)
 
 ## Prerequisites
 
