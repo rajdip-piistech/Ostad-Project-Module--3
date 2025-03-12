@@ -51,7 +51,6 @@ jobs:
       - name: Deploy application
         run: |
                 npm install -g pm2
-                ls -a
                 pm2 status
                 # delete node-app process
                 pm2 restart all
