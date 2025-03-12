@@ -46,11 +46,16 @@ jobs:
           path: .\artifacts # Windows-style path
 
       - name: Display test results
-        run: type .\artifacts\test-results.txt # 'type' for Windows instead of 'cat'
+        run: type .\artifacts\test-results.txt # 'type' for Windows
 
       - name: Deploy application
         run: |
-          npm install -g pm2
-          pm2 delete node-app || true
-          pm2 start "npm start" --name="node-app"
-          pm2 save
+                npm install -g pm2
+                ls -a
+                pm2 status
+                # delete node-app process
+                pm2 restart all
+                # Create a Background process name node-app
+                pm2 start "npm start" --name="node-app"
+                # Save The Process List.
+                pm2 save                             
