@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '22'
 
       - name: Install dependencies
         run: npm install
@@ -51,5 +51,6 @@ jobs:
       - name: Deploy application
         run: |
           npm install -g pm2
-          pm2 start app.js --name "nodejs-app" # Adjust to your app’s entry point
+          pm2 delete node-app || true
+          pm2 start "npm start" --name="node-app"
           pm2 save
